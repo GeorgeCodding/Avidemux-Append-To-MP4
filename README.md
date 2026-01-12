@@ -7,11 +7,9 @@ Create a list of videos that you want to be appended with the names {name}1, {na
 Run: ./AppendToMP4.bat {name}
 Or: 
 Run ./AppendToMP4.bat and type in the name when prompted.
-```
-This will output the appended video to {name}.
-```
+
 Example: video1.mkv, video2.mvk, video3.mkv, 
-Run: ./AppendToMP4.bat video.mkv
+./AppendToMP4.bat video.mkv
 Outputs: video.mp4
 ```
 ## Limitations
