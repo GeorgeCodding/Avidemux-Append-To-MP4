@@ -36,11 +36,28 @@ set "firstFile=!name!!count!!file_ext!"
 
 
 if not exist "!firstFile!" (
-    echo Error: Could not find the starting file "!firstFile!"
-    pause
-    exit /b
+    if not exist "!target!" (
+	
+    	echo Error: Could not find the starting file "!firstFile!" or "!target!", Exiting...
+	pause
+	exit /b
+)
+    	echo Base file !target! was found. Converting to mp4...
+
+	set "outputFile=!name!.mp4"
+	"!ADM!" --load "!target!" --video-codec copy --audio-codec copy --output-format MP4 --save "!outputFile!" --quit
+	if !ERRORLEVEL! EQU 0 (
+            echo Success: "!outputFile!" created.
+        ) else (
+            echo An error occurred during conversion.
+        )
+
+	pause
+	exit /b
+	
 )
 
+if not exist "
 
 :: Building the argument
 set "args=--load "!firstFile!""
