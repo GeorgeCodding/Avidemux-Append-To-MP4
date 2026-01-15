@@ -7,17 +7,23 @@ set "ADM=C:\Program Files\Avidemux 2.8 VC++ 64bits\avidemux.exe"
 :: --- 2. GET FILENAME ---
 set "target=%~1"
 
+:ask_file
 :: Check if the user passed a filename
 if "%target%"=="" (
     echo.
-    echo Error: No file name was provided
+    echo No filename found. Please enter the filename now.
     echo Example: If you have video1.mkv, video2.mkv, video3.mkv..., enter video.mkv
     echo.
-    set /p "target=Enter the base filename: "
+    set /p "target=Enter the base filename(or type exit): "
 )
 
 :: Clean up quotes if the user typed them manually
 set "target=%target:"=%"
+
+:: Check for exit immediately
+if /i "%target%"=="exit" (
+    exit /b
+)
 
 set "name=%~n1"
 set "file_ext=%~x1"
@@ -39,8 +45,8 @@ if not exist "!firstFile!" (
     if not exist "!target!" (
 	
     	echo Error: Could not find the starting file "!firstFile!" or "!target!", Exiting...
-	pause
-	exit /b
+	set "target="
+        goto ask_file
 )
     	echo Base file !target! was found. Converting to mp4...
 
@@ -48,12 +54,13 @@ if not exist "!firstFile!" (
 	"!ADM!" --load "!target!" --video-codec copy --audio-codec copy --output-format MP4 --save "!outputFile!" --quit
 	if !ERRORLEVEL! EQU 0 (
             echo Success: "!outputFile!" created.
+	    pause
         ) else (
             echo An error occurred during conversion.
         )
 
-	pause
-	exit /b
+	set "target="
+	goto ask_file
 	
 )
 
@@ -88,4 +95,5 @@ if %ERRORLEVEL% EQU 0 (
     echo An error occurred during the merge.
 )
 
-pause
+set "target="
+goto ask_file
